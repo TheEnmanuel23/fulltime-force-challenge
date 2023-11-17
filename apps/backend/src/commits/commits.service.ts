@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ICommit } from './interfaces/ICommit';
 import { GithubService } from 'src/github/github.service';
 import { GH_RootCommit } from 'src/github/dto/gh-commit.dto';
 
@@ -11,9 +10,7 @@ export class CommitsService {
     return this.startPipeline(page);
   }
 
-  private async startPipeline(
-    page: number,
-  ): Promise<{ data: ICommit[]; hasNext: boolean; hasPrev: boolean }> {
+  private async startPipeline(page: number) {
     // Extract commits
     const { data: githubCommits, ...rest } =
       await this.githubService.getAllCommits(page);
@@ -26,7 +23,7 @@ export class CommitsService {
     return { data: transformedCommits, ...rest };
   }
 
-  private transformCommit(ghCommit: GH_RootCommit): ICommit {
+  private transformCommit(ghCommit: GH_RootCommit) {
     return {
       sha: ghCommit.sha,
       author: {
