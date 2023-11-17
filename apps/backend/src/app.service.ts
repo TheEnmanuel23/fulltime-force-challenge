@@ -9,26 +9,36 @@ import { GH_RootCommit } from './gh-commit.dto';
 export class AppService {
   constructor(private readonly httpService: HttpService) {}
 
-  getCommits() {
-    return this.startPipeline();
+  getCommits(page: number) {
+    return this.startPipeline(page);
   }
 
-  private async startPipeline(): Promise<Commit[]> {
+  private async startPipeline(
+    page: number,
+  ): Promise<{ data: Commit[]; hasNext: boolean; hasPrev: boolean }> {
     // Extract commits
-    const githubCommits = await this.getAllCommitsFromGithub();
+    const { data: githubCommits, ...rest } =
+      await this.getAllCommitsFromGithub(page);
     // Transform commit records
-    return githubCommits.map((ghCommit) => this.transformCommit(ghCommit));
+
+    const transformedCommits = githubCommits.map((ghCommit) =>
+      this.transformCommit(ghCommit),
+    );
+
+    return { data: transformedCommits, ...rest };
   }
 
-  private async getAllCommitsFromGithub(): Promise<GH_RootCommit[]> {
+  private async getAllCommitsFromGithub(
+    page: number,
+  ): Promise<{ data: GH_RootCommit[]; hasNext: boolean; hasPrev: boolean }> {
     const token = process.env.GT_TOKEN;
     const ghUsername = process.env.GT_USERNAME;
     const ghRepository = process.env.GT_REPOSITORY;
 
-    const { data } = await firstValueFrom(
+    const { data, ...rest } = await firstValueFrom(
       this.httpService
         .get<GH_RootCommit[]>(
-          `https://api.github.com/repos/${ghUsername}/${ghRepository}/commits`,
+          `https://api.github.com/repos/${ghUsername}/${ghRepository}/commits?per_page=2&page=${page}`,
           {
             headers: {
               Accept: 'application/vnd.github+json',
@@ -44,8 +54,11 @@ export class AppService {
           }),
         ),
     );
+    const linkHeader = rest.headers.link;
+    const hasNext = linkHeader.includes(`rel=\"next\"`);
+    const hasPrev = linkHeader.includes(`rel=\"prev\"`);
 
-    return data;
+    return { data, hasNext, hasPrev };
   }
 
   private transformCommit(ghCommit: GH_RootCommit): Commit {
