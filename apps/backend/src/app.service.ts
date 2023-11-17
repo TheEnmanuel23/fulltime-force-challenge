@@ -2,18 +2,32 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
+import { Commit } from './commit.dto';
+import { GH_RootCommit } from './gh-commit.dto';
 
 @Injectable()
 export class AppService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getCommits() {
+  getCommits() {
+    return this.startPipeline();
+  }
+
+  private async startPipeline(): Promise<Commit[]> {
+    // Extract commits
+    const githubCommits = await this.getAllCommitsFromGithub();
+    // Transform commit records
+    return githubCommits.map((ghCommit) => this.transformCommit(ghCommit));
+  }
+
+  private async getAllCommitsFromGithub(): Promise<GH_RootCommit[]> {
     const token = process.env.GT_TOKEN;
     const ghUsername = process.env.GT_USERNAME;
     const ghRepository = process.env.GT_REPOSITORY;
-    const res = await firstValueFrom(
+
+    const { data } = await firstValueFrom(
       this.httpService
-        .get(
+        .get<GH_RootCommit[]>(
           `https://api.github.com/repos/${ghUsername}/${ghRepository}/commits`,
           {
             headers: {
@@ -31,6 +45,27 @@ export class AppService {
         ),
     );
 
-    return res.data;
+    return data;
+  }
+
+  private transformCommit(ghCommit: GH_RootCommit): Commit {
+    return {
+      sha: ghCommit.sha,
+      author: {
+        name: ghCommit.commit.author.name,
+        username: ghCommit.author.login,
+        profile: ghCommit.author.html_url,
+        avatar: ghCommit.author.avatar_url,
+      },
+      committer: {
+        name: ghCommit.commit.committer.name,
+        username: ghCommit.committer.login,
+        profile: ghCommit.committer.html_url,
+        avatar: ghCommit.committer.avatar_url,
+      },
+      date: ghCommit.commit.committer.date,
+      message: ghCommit.commit.message,
+      url: ghCommit.html_url,
+    };
   }
 }
