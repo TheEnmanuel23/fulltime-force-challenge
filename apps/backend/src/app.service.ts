@@ -1,13 +1,11 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosError } from 'axios';
-import { catchError, firstValueFrom } from 'rxjs';
 import { Commit } from './commit.dto';
 import { GH_RootCommit } from './gh-commit.dto';
+import { HttpCustomService } from './providers/http/http.service';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpCustomService) {}
 
   getCommits(page: number) {
     return this.startPipeline(page);
@@ -31,29 +29,10 @@ export class AppService {
   private async getAllCommitsFromGithub(
     page: number,
   ): Promise<{ data: GH_RootCommit[]; hasNext: boolean; hasPrev: boolean }> {
-    const token = process.env.GT_TOKEN;
-    const ghUsername = process.env.GT_USERNAME;
-    const ghRepository = process.env.GT_REPOSITORY;
-
-    const { data, ...rest } = await firstValueFrom(
-      this.httpService
-        .get<GH_RootCommit[]>(
-          `https://api.github.com/repos/${ghUsername}/${ghRepository}/commits?per_page=2&page=${page}`,
-          {
-            headers: {
-              Accept: 'application/vnd.github+json',
-              Authorization: `Bearer ${token}`,
-              'X-GitHub-Api-Version': '2022-11-28',
-            },
-          },
-        )
-        .pipe(
-          catchError((error: AxiosError) => {
-            console.error(error.response.data);
-            throw 'An error happened!';
-          }),
-        ),
+    const { data, ...rest } = await this.httpService.getAll<GH_RootCommit[]>(
+      `https://api.github.com/repos/${process.env.GT_USERNAME}/${process.env.GT_REPOSITORY}/commits?per_page=2&page=${page}`,
     );
+
     const linkHeader = rest.headers.link;
     const hasNext = linkHeader.includes(`rel=\"next\"`);
     const hasPrev = linkHeader.includes(`rel=\"prev\"`);
