@@ -1,15 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class HttpCustomService {
   headers = {};
-  constructor(private readonly httpService: HttpService) {
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {
     this.headers = {
       Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${process.env.GT_TOKEN}`,
+      Authorization: `Bearer ${this.configService.get('github.token')}`,
       'X-GitHub-Api-Version': '2022-11-28',
     };
   }
