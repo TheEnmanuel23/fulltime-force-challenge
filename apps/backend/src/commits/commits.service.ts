@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Commit } from './commit.dto';
-import { GH_RootCommit } from './gh-commit.dto';
-import { HttpCustomService } from './providers/http/http.service';
+import { ICommit } from './interfaces/ICommit';
+import { GH_RootCommit } from './dto/gh-commit.dto';
+import { HttpCustomService } from 'src/providers/http/http.service';
 
 @Injectable()
-export class AppService {
+export class CommitsService {
   constructor(private readonly httpService: HttpCustomService) {}
 
   getCommits(page: number) {
@@ -13,12 +13,12 @@ export class AppService {
 
   private async startPipeline(
     page: number,
-  ): Promise<{ data: Commit[]; hasNext: boolean; hasPrev: boolean }> {
+  ): Promise<{ data: ICommit[]; hasNext: boolean; hasPrev: boolean }> {
     // Extract commits
     const { data: githubCommits, ...rest } =
       await this.getAllCommitsFromGithub(page);
-    // Transform commit records
 
+    // Transform commit records
     const transformedCommits = githubCommits.map((ghCommit) =>
       this.transformCommit(ghCommit),
     );
@@ -40,7 +40,7 @@ export class AppService {
     return { data, hasNext, hasPrev };
   }
 
-  private transformCommit(ghCommit: GH_RootCommit): Commit {
+  private transformCommit(ghCommit: GH_RootCommit): ICommit {
     return {
       sha: ghCommit.sha,
       author: {

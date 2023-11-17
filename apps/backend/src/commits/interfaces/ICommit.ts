@@ -1,14 +1,14 @@
-export class CommitParticipant {
+export class ICommitParticipant {
   name: string;
   username: string;
   profile: string;
   avatar: string;
 }
 
-export class Commit {
+export class ICommit {
   sha: string;
-  author: CommitParticipant;
-  committer: CommitParticipant;
+  author: ICommitParticipant;
+  committer: ICommitParticipant;
   date: string;
   message: string;
   url: string;
