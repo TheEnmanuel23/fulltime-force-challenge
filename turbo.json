@@ -1,9 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "globalEnv": ["TRPC_SERVER"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["TRPC_SERVER"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {},
