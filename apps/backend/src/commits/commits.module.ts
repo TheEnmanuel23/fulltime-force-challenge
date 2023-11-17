@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CommitsService } from './commits.service';
-import { ProvidersModule } from 'src/providers/providers.module';
-import { HttpCustomService } from 'src/providers/http/http.service';
 import { CommitsController } from './commits.controller';
-import { ConfigModule } from '@nestjs/config';
+import { GithubModule } from 'src/github/github.module';
+import { GithubService } from 'src/github/github.service';
 
 @Module({
-  imports: [ConfigModule, ProvidersModule],
+  imports: [GithubModule],
   controllers: [CommitsController],
-  providers: [HttpCustomService, CommitsService],
+  providers: [GithubService, CommitsService],
 })
 export class CommitsModule {}

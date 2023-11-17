@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ICommit } from './interfaces/ICommit';
-import { GH_RootCommit } from './dto/gh-commit.dto';
-import { HttpCustomService } from 'src/providers/http/http.service';
-import { ConfigService } from '@nestjs/config';
+import { GithubService } from 'src/github/github.service';
+import { GH_RootCommit } from 'src/github/dto/gh-commit.dto';
 
 @Injectable()
 export class CommitsService {
-  constructor(
-    private readonly httpService: HttpCustomService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly githubService: GithubService) {}
 
   getCommits(page: number) {
     return this.startPipeline(page);
@@ -20,7 +16,7 @@ export class CommitsService {
   ): Promise<{ data: ICommit[]; hasNext: boolean; hasPrev: boolean }> {
     // Extract commits
     const { data: githubCommits, ...rest } =
-      await this.getAllCommitsFromGithub(page);
+      await this.githubService.getAllCommits(page);
 
     // Transform commit records
     const transformedCommits = githubCommits.map((ghCommit) =>
@@ -28,22 +24,6 @@ export class CommitsService {
     );
 
     return { data: transformedCommits, ...rest };
-  }
-
-  private async getAllCommitsFromGithub(
-    page: number,
-  ): Promise<{ data: GH_RootCommit[]; hasNext: boolean; hasPrev: boolean }> {
-    const { username, repository } = this.configService.get('github');
-
-    const { data, ...rest } = await this.httpService.getAll<GH_RootCommit[]>(
-      `https://api.github.com/repos/${username}/${repository}/commits?per_page=2&page=${page}`,
-    );
-
-    const linkHeader = rest.headers.link;
-    const hasNext = linkHeader.includes(`rel=\"next\"`);
-    const hasPrev = linkHeader.includes(`rel=\"prev\"`);
-
-    return { data, hasNext, hasPrev };
   }
 
   private transformCommit(ghCommit: GH_RootCommit): ICommit {
