@@ -24,7 +24,7 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          {children}
+          <main className="flex justify-center py-10 ">{children} </main>
         </ThemeProvider>
       </body>
     </html>

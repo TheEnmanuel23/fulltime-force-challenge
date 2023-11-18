@@ -4,3 +4,4 @@ export * from "./switch";
 export * from "./separator";
 export * from "./popover";
 export * from "./hover-card";
+export * from "./skeleton";

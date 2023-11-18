@@ -14,58 +14,56 @@ export default async function Home({
   const { data, hasNext, hasPrev } = await trpc.getCommits.query({ page });
 
   return (
-    <main className="flex justify-center py-10 ">
-      <div className="space-y-10 w-full px-10 lg:w-9/12">
-        <header className="space-y-6 flex flex-col items-center">
-          <ModeToggle />
-          <h2 className="text-black text-xl tracking-tight font-bold mb-3 dark:text-slate-200">
-            Commits
-          </h2>
-        </header>
-        <div>
-          <ul className="divide-y divide-gray-300 border border-gray-300 dark:border-gray-800 dark:divide-gray-800 rounded-md">
-            {data.map((item) => (
-              <li key={item.sha}>
-                <div className="flex justify-between items-center py-2 px-4">
-                  <div>
+    <div className="space-y-10 w-full px-10 lg:w-9/12">
+      <header className="space-y-6 flex flex-col items-center">
+        <ModeToggle />
+        <h2 className="text-black text-xl tracking-tight font-bold mb-3 dark:text-slate-200">
+          Commits
+        </h2>
+      </header>
+      <div>
+        <ul className="divide-y divide-gray-300 border border-gray-300 dark:border-gray-800 dark:divide-gray-800 rounded-md">
+          {data.map((item) => (
+            <li key={item.sha}>
+              <div className="flex justify-between items-center py-2 px-4">
+                <div>
+                  <a
+                    className="text-sm font-semibold hover:underline hover:text-blue-600"
+                    href={item.url}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {item.message}
+                  </a>
+                  <Participants
+                    author={item.author}
+                    committer={item.committer}
+                    date={item.date}
+                  />
+                </div>
+                <div className="hidden md:flex border border-gray-300 dark:border-gray-800 h-fit items-center justify-between rounded-md">
+                  <div className="py-1 px-2 rounded-l-md flex">
+                    <ClipBoardButton text={item.url} />
+                  </div>
+                  <div className="py-1 px-2 border-l border-gray-300 dark:border-gray-800 rounded-r-md flex">
                     <a
-                      className="text-sm font-semibold hover:underline hover:text-blue-600"
+                      className="text-xs text-muted-foreground dark:text-gray-300"
                       href={item.url}
                       rel="noreferrer"
                       target="_blank"
                     >
-                      {item.message}
+                      {item.sha.substring(0, 7)}
                     </a>
-                    <Participants
-                      author={item.author}
-                      committer={item.committer}
-                      date={item.date}
-                    />
-                  </div>
-                  <div className="hidden md:flex border border-gray-300 dark:border-gray-800 h-fit items-center justify-between rounded-md">
-                    <div className="py-1 px-2 rounded-l-md flex">
-                      <ClipBoardButton text={item.url} />
-                    </div>
-                    <div className="py-1 px-2 border-l border-gray-300 dark:border-gray-800 rounded-r-md flex">
-                      <a
-                        className="text-xs text-muted-foreground dark:text-gray-300"
-                        href={item.url}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        {item.sha.substring(0, 7)}
-                      </a>
-                    </div>
                   </div>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <footer>
-          <Actions hasNext={hasNext} hasPrev={hasPrev} page={page} />
-        </footer>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-    </main>
+      <footer>
+        <Actions hasNext={hasNext} hasPrev={hasPrev} page={page} />
+      </footer>
+    </div>
   );
 }
