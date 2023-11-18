@@ -22,6 +22,7 @@ export function Actions({
           className="rounded-l-lg"
           disabled={!hasPrev}
           href={`${hostname}?page=${page - 1}`}
+          label="Newer"
         />
 
         <Separator orientation="vertical" />
@@ -29,6 +30,7 @@ export function Actions({
           className="rounded-r-lg"
           disabled={!hasNext}
           href={`${hostname}?page=${page + 1}`}
+          label="Older"
         />
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import type { ReactElement } from "react";
 import type { Participant } from "./participant-hover-card";
 import { ParticipantHoverCard } from "./participant-hover-card";
 
@@ -12,7 +13,7 @@ export function Participants({
   author: Participant;
   committer: Participant;
   date: string;
-}) {
+}): ReactElement {
   "rounded-full z-10 border";
   const committerAndAuthorAreDifferent = author.username !== committer.username;
 

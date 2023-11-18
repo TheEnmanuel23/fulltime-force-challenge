@@ -1,5 +1,6 @@
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import type { ReactElement } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "ui";
 import { cn } from "ui/src/lib/utils";
 
@@ -16,7 +17,7 @@ export function ParticipantHoverCard({
 }: {
   participant: Participant;
   className: string;
-}) {
+}): ReactElement {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>

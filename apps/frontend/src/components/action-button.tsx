@@ -6,10 +6,12 @@ export function ActionButton({
   disabled,
   href,
   className,
+  label,
 }: {
   disabled: boolean;
   href: string;
   className: string;
+  label: string;
 }): ReactElement {
   return (
     <div
@@ -22,11 +24,11 @@ export function ActionButton({
           className="block text-sm text-muted-foreground dark:text-gray-300 p-2"
           href={href}
         >
-          Older
+          {label}
         </Link>
       ) : (
         <span className="block text-sm text-muted-foreground dark:text-gray-300 p-2 ">
-          Older
+          {label}
         </span>
       )}
     </div>

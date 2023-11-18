@@ -2,9 +2,10 @@
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
+import type { ReactElement } from "react";
 import { Label, Switch } from "ui";
 
-export function ModeToggle() {
+export function ModeToggle(): ReactElement {
   const { theme, setTheme } = useTheme();
 
   return (
