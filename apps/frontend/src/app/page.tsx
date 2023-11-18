@@ -2,7 +2,6 @@ import { CopyIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ModeToggle } from "../components/mode-toggle";
 import { trpc } from "../trpc";
-import Image from "next/image";
 import { Participants } from "../components/participants";
 
 export default async function Home({
