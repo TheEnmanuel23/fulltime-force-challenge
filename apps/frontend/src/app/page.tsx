@@ -1,8 +1,8 @@
-import { CopyIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ModeToggle } from "../components/mode-toggle";
 import { trpc } from "../trpc";
 import { Participants } from "../components/participants";
+import { ClipBoardButton } from "../components/clipboard-button";
 
 export default async function Home({
   searchParams,
@@ -51,14 +51,11 @@ export default async function Home({
                       </p>
                     </div>
                   </div>
-                  <div className="hidden md:flex border border-gray-300 dark:border-gray-800 h-fit flex items-center justify-between rounded-md">
-                    <div className="px-1 rounded-l-md">
-                      <button className="text-xs text-muted-foreground dark:text-gray-300">
-                        {/* <CheckIcon className="h-4 w-4 text-green-600" /> */}
-                        <CopyIcon className="h-4 w-4" />
-                      </button>
+                  <div className="hidden md:flex border border-gray-300 dark:border-gray-800 h-fit items-center justify-between rounded-md">
+                    <div className="py-1 px-2 rounded-l-md flex">
+                      <ClipBoardButton text={item.url} />
                     </div>
-                    <div className="px-1 border-l border-gray-300 dark:border-gray-800 rounded-r-md">
+                    <div className="py-1 px-2 border-l border-gray-300 dark:border-gray-800 rounded-r-md flex">
                       <a
                         className="text-xs text-muted-foreground dark:text-gray-300"
                         href={item.url}
