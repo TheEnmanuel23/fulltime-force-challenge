@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { ModeToggle } from "../components/mode-toggle";
 import { trpc } from "../trpc";
 import { Participants } from "../components/participants";
@@ -35,21 +34,11 @@ export default async function Home({
                     >
                       {item.message}
                     </a>
-                    <div className="flex gap-2 text-sm items-center">
-                      <Participants
-                        author={item.author}
-                        committer={item.committer}
-                      />
-                      <p className="font-semibold text-xs">
-                        {item.author.username}
-                      </p>
-                      <p className="text-muted-foreground text-xs space-x-1">
-                        <span>commited</span>
-                        <span>
-                          {format(new Date(item.date), "MMM do, yyyy")}
-                        </span>
-                      </p>
-                    </div>
+                    <Participants
+                      author={item.author}
+                      committer={item.committer}
+                      date={item.date}
+                    />
                   </div>
                   <div className="hidden md:flex border border-gray-300 dark:border-gray-800 h-fit items-center justify-between rounded-md">
                     <div className="py-1 px-2 rounded-l-md flex">
