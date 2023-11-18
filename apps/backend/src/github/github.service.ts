@@ -12,11 +12,12 @@ export class GithubService {
 
   async getAllCommits(
     page: number,
+    perPage: 5,
   ): Promise<{ data: GH_RootCommit[]; hasNext: boolean; hasPrev: boolean }> {
     const { username, repository } = this.configService.get('github');
 
     const { data, ...rest } = await this.httpService.getAll<GH_RootCommit[]>(
-      `https://api.github.com/repos/${username}/${repository}/commits?per_page=2&page=${page}`,
+      `https://api.github.com/repos/${username}/${repository}/commits?per_page=${perPage}&page=${page}`,
     );
 
     const linkHeader = rest.headers.link;

@@ -13,7 +13,7 @@ export class CommitsService {
   private async startPipeline(page: number) {
     // Extract commits
     const { data: githubCommits, ...rest } =
-      await this.githubService.getAllCommits(page);
+      await this.githubService.getAllCommits(page, 5);
 
     // Transform commit records
     const transformedCommits = githubCommits.map((ghCommit) =>
