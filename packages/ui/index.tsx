@@ -1,4 +1,4 @@
 // component exports
-import "./styles/global.css";
+import "tailwind-config/global.css";
 
 export * from "./src/components";
