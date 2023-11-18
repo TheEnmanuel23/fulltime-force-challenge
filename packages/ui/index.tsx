@@ -1,2 +1,4 @@
 // component exports
-export { Card } from "./card";
+import "./styles/global.css";
+
+export * from "./src/components";
