@@ -1,5 +1,3 @@
-"use client";
-
 import { Separator } from "ui";
 import type { ReactElement } from "react";
 import { ActionButton } from "./action-button";
@@ -13,7 +11,7 @@ export function Actions({
   hasPrev: boolean;
   page: number;
 }): ReactElement {
-  const hostname = window.location.origin;
+  const hostname = process.env.URL_APP;
 
   return (
     <div className="flex justify-center">
