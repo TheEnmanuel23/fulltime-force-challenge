@@ -12,8 +12,8 @@ export default async function Home({
   const { data } = await trpc.getCommits.query({ page });
 
   return (
-    <main className="flex justify-center py-10">
-      <div className="space-y-10 w-full px-10">
+    <main className="flex justify-center py-10 ">
+      <div className="space-y-10 w-full px-10 lg:w-9/12">
         <header className="space-y-6 flex flex-col items-center">
           <ModeToggle />
           <h2 className="text-black text-xl tracking-tight font-bold mb-3 dark:text-slate-200">
