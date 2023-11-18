@@ -1,9 +1,9 @@
 "use client";
 
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { type ReactElement, useState } from "react";
 
-export function ClipBoardButton({ text }: { text: string }) {
+export function ClipBoardButton({ text }: { text: string }): ReactElement {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -21,6 +21,7 @@ export function ClipBoardButton({ text }: { text: string }) {
     <button
       className="text-xs text-muted-foreground dark:text-gray-300"
       onClick={copyToClipboard}
+      type="button"
     >
       {copied ? (
         <CheckIcon className="h-4 w-4 text-green-600" />

@@ -1,15 +1,17 @@
+import type { ReactElement } from "react";
 import { ModeToggle } from "../components/mode-toggle";
 import { trpc } from "../trpc";
 import { Participants } from "../components/participants";
 import { ClipBoardButton } from "../components/clipboard-button";
+import { Actions } from "../components/actions";
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: { page: string };
-}) {
+}): Promise<ReactElement> {
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
-  const { data } = await trpc.getCommits.query({ page });
+  const { data, hasNext, hasPrev } = await trpc.getCommits.query({ page });
 
   return (
     <main className="flex justify-center py-10 ">
@@ -60,6 +62,9 @@ export default async function Home({
             ))}
           </ul>
         </div>
+        <footer>
+          <Actions hasNext={hasNext} hasPrev={hasPrev} page={page} />
+        </footer>
       </div>
     </main>
   );
