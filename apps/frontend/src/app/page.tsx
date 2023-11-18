@@ -2,6 +2,8 @@ import { CopyIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ModeToggle } from "../components/mode-toggle";
 import { trpc } from "../trpc";
+import Image from "next/image";
+import { Participants } from "../components/participants";
 
 export default async function Home({
   searchParams,
@@ -25,9 +27,9 @@ export default async function Home({
             {data.map((item) => (
               <li key={item.sha}>
                 <div className="flex justify-between items-center py-2 px-4">
-                  <div className="">
+                  <div>
                     <a
-                      className="text-md hover:underline font-semibold"
+                      className="text-sm font-semibold hover:underline hover:text-blue-600"
                       href={item.url}
                       rel="noreferrer"
                       target="_blank"
@@ -35,7 +37,13 @@ export default async function Home({
                       {item.message}
                     </a>
                     <div className="flex gap-2 text-sm items-center">
-                      <p className="font-semibold">{item.author.username}</p>
+                      <Participants
+                        author={item.author}
+                        committer={item.committer}
+                      />
+                      <p className="font-semibold text-xs">
+                        {item.author.username}
+                      </p>
                       <p className="text-muted-foreground text-xs space-x-1">
                         <span>commited</span>
                         <span>
@@ -44,7 +52,7 @@ export default async function Home({
                       </p>
                     </div>
                   </div>
-                  <div className="hidde md:flex border border-gray-300 dark:border-gray-800 h-fit flex items-center justify-between rounded-md">
+                  <div className="hidden md:flex border border-gray-300 dark:border-gray-800 h-fit flex items-center justify-between rounded-md">
                     <div className="px-1 rounded-l-md">
                       <button className="text-xs text-muted-foreground dark:text-gray-300">
                         {/* <CheckIcon className="h-4 w-4 text-green-600" /> */}
