@@ -63,11 +63,9 @@ npm install
 3. Add environment variables (**Backend**)
 Create a file `.env` in the `./apps/backend` directory, then add these variables:
 ```
-GT_TOKEN=123455
 GT_USERNAME=TheEnmanuel23
 GT_REPOSITORY=fulltime-force-challenge
 ```
-The **GT_TOKEN** was sent via Email, you can rename the **.env.example file to .env** and just replace **GT_TOKEN**.
 
 4. Add environment variables (**Frontend**)
 Create a file `.env` in the `./apps/frontend` directory, then add these variables:
