@@ -20,16 +20,12 @@ export class HttpCustomService {
 
   public getAll<T>(url: string) {
     return firstValueFrom(
-      this.httpService
-        .get<T>(url, {
-          headers: this.headers,
-        })
-        .pipe(
-          catchError((error: AxiosError) => {
-            console.error(error.response.data);
-            throw 'An error happened!';
-          }),
-        ),
+      this.httpService.get<T>(url).pipe(
+        catchError((error: AxiosError) => {
+          console.error(error.response.data);
+          throw 'An error happened!';
+        }),
+      ),
     );
   }
 }
